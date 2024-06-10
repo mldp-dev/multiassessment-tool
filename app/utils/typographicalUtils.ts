@@ -1,23 +1,19 @@
-import axios from 'axios';
-import { generatePrompt } from '../config/openaiConfig';
-
-const AZURE_API_URL = 'https://YOUR_AZURE_REGION.api.cognitive.microsoft.com/';
+import { generatePrompt, openai, MODEL_ID } from '../config/openaiConfig';
 
 export const evaluateTypographicalErrors = async (phrase: string): Promise<string> => {
     try {
         const prompt = generatePrompt(phrase);
 
-        const response = await axios.post(`${AZURE_API_URL}/openai/deployments/deploy-gpt-4/chat/completions?api-version=2023-12-01-preview`, {
-            prompt: prompt
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Ocp-Apim-Subscription-Key': 'YOUR_AZURE_API_KEY' // Replace with your Azure OpenAI API key
-            }
+        // Send a request to OpenAI to evaluate typographical errors
+        const response = await openai.ChatCompletion.create({
+            engine: MODEL_ID,
+            messages: prompt,
         });
 
-        const translatedText = response.data.choices[0].message.content.trim();
+        // Extract translated text from the response
+        const translatedText = response.choices[0].message.content.trim();
 
+        // Evaluate typographical errors
         let points: string;
 
         if (translatedText.toLowerCase() === phrase.toLowerCase()) {
