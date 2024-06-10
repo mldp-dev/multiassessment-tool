@@ -1,35 +1,27 @@
-// config/openaiConfig.ts
 import openai, { OpenAI } from 'openai';
 
-// Define the OpenAIConfig interface
-interface OpenAIConfig {
-    apiInstance: any; // Define apiInstance property
+interface OpenAIConfig extends OpenAI {
     api_type: string;
     api_base: string;
     api_version: string;
     api_key: string;
-    model_id: string; // Add model_id property
 }
 
-const API_KEY = 'd439367339084d87b348a72ee88c9950'; // Define API_KEY
+const API_KEY = 'd439367339084d87b348a72ee88c9950';
+const MODEL_ID = 'deploy-gpt-4';
 
-// Create an instance of the OpenAI API
-const apiInstance = new openai.OpenAI({
-    apiKey: API_KEY,
-});
+const openaiConfig: OpenAIConfig = openai as unknown as OpenAIConfig;
 
-// Define model_id
-const model_id = 'deploy-gpt-4';
+openaiConfig.api_type = 'azure';
+openaiConfig.api_base = 'https://translate-prod-tcap-openai-001.openai.azure.com/';
+openaiConfig.api_version = '2023-09-15-preview';
+openaiConfig.api_key = API_KEY;
 
-// Construct the openaiConfig object
-const openaiConfig: OpenAIConfig = {
-    apiInstance, // Assign apiInstance to the config object
-    api_type: 'azure',
-    api_base: 'https://translate-prod-tcap-openai-001.openai.azure.com/',
-    api_version: '2023-09-15-preview',
-    api_key: API_KEY,
-    model_id: model_id,
+const generatePrompt = (phrase: string) => {
+    return [
+        { role: 'system', content: 'Check if there\'s typographical error. Count the correct words and incorrect words. Get the percentage of correct words.' },
+        { role: 'user', content: phrase }
+    ];
 };
 
-// Export the openaiConfig object
-export { openaiConfig };
+export { openaiConfig, MODEL_ID, API_KEY, openai, generatePrompt };
