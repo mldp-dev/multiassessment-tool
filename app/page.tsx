@@ -1,10 +1,11 @@
-// pages/home/index.tsx
+import React from 'react';
+import TypographicalPage from './components/typographical/page';
 
-const Home: React.FC = () => {
+const App: React.FC = () => {
+
   return (
-    <>
-    </>
+  <TypographicalPage />
   );
 };
 
-export default Home;
+export default App;

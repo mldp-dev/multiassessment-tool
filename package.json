@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/cheerio": "^0.22.35",
     "antd": "^5.18.0",
     "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cheerio-without-node-native": "^1.0.0-rc.2",
     "next": "14.2.3",
     "openai": "^4.49.1",
     "react": "^18",

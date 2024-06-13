@@ -1,11 +1,10 @@
-'use client';
+'use client'
 
 import React, { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { Typography, Row, Col, Button, Input } from 'antd';
+import { Typography, Row, Col, Button } from 'antd';
 
 const { Title, Text } = Typography;
-const { TextArea } = Input;
 
 interface ApiResponse {
   choices: {
@@ -38,13 +37,24 @@ const TypographicalPage: React.FC = () => {
         }
       );
       const response = res.data.choices[0]?.message.content ?? '';
-      // Split the response by newline to separate each line
-      const lines = response.split('\n');
-      const formattedLines = lines.map(line => <div key={line}><Text>{line}</Text><br /></div>);
-      setEvaluation(<div>{formattedLines}</div>);
+      setEvaluation(response);
     } catch (error) {
       console.error("Error evaluating typographical errors:", error);
     }
+  };
+
+  const renderEvaluation = (evaluation: string) => {
+    // Split the evaluation by newline to separate each line
+    const lines = evaluation.split('\n');
+    return lines.map((line, index) => {
+      const parts = line.split(':');
+      return (
+        <div key={index}>
+          <Text strong>{parts[0]}:</Text> <Text>{parts[1]}</Text> <Text>{parts[2]}</Text>
+          <br />
+        </div>
+      );
+    });
   };
 
   return (
@@ -55,9 +65,9 @@ const TypographicalPage: React.FC = () => {
             <Title level={2}>Typographical Error Evaluation</Title>
           </div>
           <div className="mb-6">
-            <TextArea
+            <input
+              type="text"
               id="chatbox"
-              autoSize={{ minRows: 3, maxRows: 6 }}
               className="w-full border-2 border-red-300 rounded-md p-2"
               onChange={(e) => setPhrase(e.target.value)}
               value={phrase}
@@ -68,7 +78,7 @@ const TypographicalPage: React.FC = () => {
           </div>
           {evaluation && (
             <div style={{ marginTop: '20px' }}>
-              {evaluation}
+              {renderEvaluation(evaluation)}
             </div>
           )}
         </Col>
@@ -77,4 +87,4 @@ const TypographicalPage: React.FC = () => {
   );
 };
 
-export default TypographicalPage
+export default TypographicalPage;
